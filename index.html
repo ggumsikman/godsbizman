@@ -982,58 +982,26 @@
             무엇이든 질문하세요. 이강락 대표님이 직접 답변드립니다.
         </p>
 
-        <!-- 관리자 모드 바 -->
-        <div class="admin-bar" id="adminBar" style="display:none;">
-            <span>관리자 모드</span> · 이강락 대표님으로 접속 중입니다.
-            <button class="admin-logout" onclick="adminLogout()">로그아웃</button>
-        </div>
-
-        <!-- 게시판 헤더 -->
-        <div class="board-top">
-            <span class="board-count" id="boardCount">전체 0건</span>
-            <div style="display:flex; gap:10px;">
-                <button class="form-cancel" onclick="openAdminLogin()" id="adminLoginBtn">관리자</button>
-                <button class="board-write-btn" onclick="toggleForm()">✏️ 질문하기</button>
+        <!-- 준비 중 안내 -->
+        <div style="
+            border:1px solid var(--line);
+            background:var(--paper);
+            border-radius:4px;
+            padding:52px 32px;
+            text-align:center;
+        ">
+            <div style="font-size:2.2em; margin-bottom:16px;">🛠️</div>
+            <p style="font-size:1.05em; font-weight:700; color:var(--ink); margin-bottom:10px;">
+                Q&amp;A 게시판 준비 중입니다
+            </p>
+            <p style="font-size:.92em; color:var(--gray); line-height:1.9;">
+                이강락 대표님과 직접 소통할 수 있는 Q&amp;A 공간을 준비하고 있습니다.<br>
+                오픈 시 안내드리겠습니다.
+            </p>
+            <div style="margin-top:28px; display:inline-block; border:1px solid var(--line); border-radius:50px; padding:7px 22px; font-size:.8em; color:var(--gray-lt); letter-spacing:1px;">
+                COMING SOON
             </div>
         </div>
-
-        <!-- 글쓰기 폼 -->
-        <div class="board-form" id="boardForm">
-            <h3>질문 작성</h3>
-            <div class="form-row">
-                <input type="text" id="fName" placeholder="이름 (필수)" />
-                <input type="password" id="fPw" placeholder="비밀번호 (비공개 질문용)" />
-            </div>
-            <div class="form-row">
-                <input type="text" id="fTitle" placeholder="제목" style="flex:2;" />
-            </div>
-            <div class="form-row">
-                <textarea id="fContent" placeholder="질문 내용을 자유롭게 적어주세요."></textarea>
-            </div>
-            <div class="form-bottom">
-                <div>
-                    <label class="lock-toggle">
-                        <input type="checkbox" id="fPrivate">
-                        🔒 비공개 질문 (내용을 다른 사람에게 숨깁니다)
-                    </label>
-                    <p class="lock-hint">비공개 설정 시 위에 입력한 비밀번호로 내용을 확인할 수 있습니다.</p>
-                </div>
-                <div style="display:flex; gap:10px;">
-                    <button class="form-cancel" onclick="toggleForm()">취소</button>
-                    <button class="form-submit" onclick="submitPost()">질문 등록</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 게시판 테이블 -->
-        <div class="board-table-head">
-            <span>번호</span>
-            <span>제목 / 질문</span>
-            <span>작성자</span>
-            <span>날짜</span>
-            <span>답변</span>
-        </div>
-        <div id="boardList"></div>
     </div>
 </section>
 
