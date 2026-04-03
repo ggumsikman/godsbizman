@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사업하는 예수쟁이 | 이강락 대표</title>
+    <style>
+        :root {
+            --navy:   #1A2744;
+            --gold:   #C9A84C;
+            --gold-lt:#E8C96A;
+            --cream:  #FAF7F0;
+            --white:  #FFFFFF;
+            --gray:   #6B7280;
+            --light:  #F3F0E8;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;
+            background: var(--cream);
+            color: #1a1a1a;
+        }
+
+        /* ── 네비게이션 ── */
+        nav {
+            position: fixed; top:0; left:0; right:0; z-index:100;
+            background: rgba(26,39,68,.97);
+            backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; height: 64px;
+        }
+        .nav-logo {
+            color: var(--gold);
+            font-size: 1.1em; font-weight: 900;
+            letter-spacing: -0.5px; line-height:1.3;
+        }
+        .nav-logo span { color: white; font-weight: 400; font-size:.85em; display:block; }
+        .nav-links { display:flex; gap:28px; list-style:none; }
+        .nav-links a {
+            color: rgba(255,255,255,.8); text-decoration:none;
+            font-size:.9em; font-weight:500;
+            transition: color .2s;
+        }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-cta {
+            background: var(--gold); color: var(--navy);
+            border:none; border-radius:50px;
+            padding: 8px 20px; font-size:.85em; font-weight:700;
+            cursor:pointer; transition: background .2s;
+        }
+        .nav-cta:hover { background: var(--gold-lt); }
+        .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+        .hamburger span { width:24px; height:2px; background:white; border-radius:2px; }
+
+        /* ── 히어로 ── */
+        .hero {
+            min-height: 100vh;
+            background:
+                linear-gradient(to bottom, rgba(26,39,68,.75) 0%, rgba(26,39,68,.55) 60%, rgba(26,39,68,.85) 100%),
+                url('assets/hero-bg.jpg') center/cover no-repeat;
+            background-color: var(--navy);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
+            padding: 80px 24px 60px;
+        }
+        .hero-inner { max-width: 700px; }
+        .hero-tag {
+            display: inline-block;
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+            border-radius: 50px;
+            padding: 5px 18px; font-size:.82em; font-weight:600;
+            margin-bottom: 20px; letter-spacing:1px;
+        }
+        .hero h1 {
+            font-size: clamp(2em, 6vw, 3.4em);
+            font-weight: 900; color: white;
+            line-height: 1.25; margin-bottom: 16px;
+        }
+        .hero h1 em { color: var(--gold); font-style:normal; }
+        .hero-sub {
+            color: rgba(255,255,255,.78);
+            font-size: clamp(.95em,2.5vw,1.15em);
+            line-height: 1.8; margin-bottom: 36px;
+        }
+        .hero-quote {
+            color: var(--gold-lt);
+            font-size: clamp(.9em,2.2vw,1.05em);
+            font-style: italic; margin-bottom: 36px;
+            border-left: 3px solid var(--gold);
+            padding-left: 16px; text-align:left;
+        }
+        .hero-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+        .btn-primary {
+            background: var(--gold); color: var(--navy);
+            border:none; border-radius:50px;
+            padding: 14px 32px; font-size:1em; font-weight:800;
+            cursor:pointer; transition: transform .2s, box-shadow .2s;
+            text-decoration:none; display:inline-block;
+        }
+        .btn-primary:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(201,168,76,.45); }
+        .btn-outline {
+            background: transparent; color: white;
+            border: 2px solid rgba(255,255,255,.6);
+            border-radius:50px;
+            padding: 13px 28px; font-size:1em; font-weight:600;
+            cursor:pointer; transition: border-color .2s, color .2s;
+            text-decoration:none; display:inline-block;
+        }
+        .btn-outline:hover { border-color:white; color:white; }
+
+        /* ── 섹션 공통 ── */
+        section { padding: 80px 24px; }
+        .section-inner { max-width: 1080px; margin: 0 auto; }
+        .section-tag {
+            color: var(--gold); font-size:.82em; font-weight:700;
+            letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;
+        }
+        .section-title {
+            font-size: clamp(1.6em,4vw,2.4em);
+            font-weight:900; color: var(--navy); line-height:1.3;
+            margin-bottom:14px;
+        }
+        .section-desc {
+            color: var(--gray); font-size:1em; line-height:1.8;
+            max-width:600px; margin-bottom:40px;
+        }
+
+        /* ── 소개 (이강락 대표) ── */
+        .intro { background: var(--navy); }
+        .intro .section-title { color: white; }
+        .intro .section-desc { color: rgba(255,255,255,.65); }
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 48px; align-items: start;
+        }
+        .intro-photo {
+            background: rgba(255,255,255,.08);
+            border: 2px solid rgba(201,168,76,.3);
+            border-radius: 16px;
+            aspect-ratio:3/4;
+            display:flex; align-items:center; justify-content:center;
+            color: rgba(255,255,255,.25); font-size:.9em; text-align:center;
+        }
+        .intro-content { color:white; }
+        .intro-name {
+            font-size:1.8em; font-weight:900; margin-bottom:6px;
+            color:white;
+        }
+        .intro-title-tag {
+            display:inline-block;
+            background:rgba(201,168,76,.2); color:var(--gold);
+            border-radius:6px; padding:4px 12px; font-size:.82em; font-weight:600;
+            margin-bottom:20px;
+        }
+        .intro-text { color:rgba(255,255,255,.75); line-height:1.9; margin-bottom:24px; }
+        .intro-tags { display:flex; flex-wrap:wrap; gap:10px; }
+        .tag {
+            background:rgba(255,255,255,.08); color:rgba(255,255,255,.7);
+            border-radius:50px; padding:5px 14px; font-size:.82em;
+        }
+
+        /* ── 강의 ── */
+        .lectures { background: var(--white); }
+        .card-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap:24px;
+        }
+        .card {
+            background: var(--cream);
+            border-radius:16px;
+            overflow:hidden;
+            box-shadow:0 4px 16px rgba(0,0,0,.06);
+            transition:transform .25s, box-shadow .25s;
+        }
+        .card:hover { transform:translateY(-6px); box-shadow:0 12px 28px rgba(0,0,0,.1); }
+        .card-thumb {
+            aspect-ratio:16/9;
+            background: linear-gradient(135deg, var(--navy), #2d4a8a);
+            display:flex; align-items:center; justify-content:center;
+            font-size:2.5em; position:relative;
+        }
+        .card-play {
+            position:absolute;
+            width:48px; height:48px;
+            background:rgba(201,168,76,.9);
+            border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .card-play::after {
+            content:'';
+            border: 9px solid transparent;
+            border-left: 16px solid white;
+            margin-left:4px;
+        }
+        .card-body { padding:18px; }
+        .card-cat { color:var(--gold); font-size:.78em; font-weight:700; margin-bottom:6px; }
+        .card-title { font-size:1em; font-weight:700; color:var(--navy); line-height:1.5; margin-bottom:8px; }
+        .card-meta { color:var(--gray); font-size:.82em; }
+
+        /* ── 칼럼 ── */
+        .columns { background: var(--light); }
+        .col-list { display:flex; flex-direction:column; gap:18px; }
+        .col-item {
+            background:white;
+            border-radius:14px;
+            padding:22px 24px;
+            display:flex; gap:20px; align-items:flex-start;
+            box-shadow:0 2px 10px rgba(0,0,0,.05);
+            transition:transform .2s;
+        }
+        .col-item:hover { transform:translateX(6px); }
+        .col-date {
+            min-width:52px; text-align:center;
+            background:var(--navy); color:var(--gold);
+            border-radius:10px; padding:8px 4px;
+            font-size:.78em; font-weight:700; line-height:1.4;
+        }
+        .col-content { flex:1; }
+        .col-title { font-size:1em; font-weight:700; color:var(--navy); margin-bottom:6px; line-height:1.5; }
+        .col-preview { color:var(--gray); font-size:.88em; line-height:1.7; }
+        .col-more { color:var(--gold); font-size:.82em; font-weight:600; margin-top:6px; display:inline-block; cursor:pointer; }
+
+        /* ── 도서 ── */
+        .book-section { background: var(--navy); }
+        .book-grid {
+            display:grid;
+            grid-template-columns: 260px 1fr;
+            gap:52px; align-items:center;
+        }
+        .book-cover {
+            background: white;
+            border-radius:12px;
+            padding:24px;
+            box-shadow:0 20px 50px rgba(0,0,0,.4);
+            text-align:center;
+        }
+        .book-cover-title {
+            font-size:1.6em; font-weight:900;
+            color:var(--navy); line-height:1.3; margin-bottom:8px;
+        }
+        .book-cover-author { color:var(--gray); font-size:.88em; margin-bottom:16px; }
+        .book-cover-img {
+            width:100%; aspect-ratio:3/4;
+            background: linear-gradient(160deg,#f5f0e8,#e8e0d0);
+            border-radius:8px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:.85em; color:#aaa; margin-bottom:12px;
+        }
+        .book-cover-sub {
+            font-size:.78em; color:var(--gray);
+            border-top:1px solid #eee; padding-top:10px; line-height:1.6;
+            font-style:italic;
+        }
+        .book-info .section-title { color:white; }
+        .book-info .section-desc { color:rgba(255,255,255,.65); max-width:100%; }
+        .book-features { display:flex; flex-direction:column; gap:14px; margin-bottom:32px; }
+        .book-feat {
+            display:flex; gap:14px; align-items:flex-start;
+        }
+        .feat-icon {
+            width:38px; height:38px; min-width:38px;
+            background:rgba(201,168,76,.15);
+            border-radius:10px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.1em;
+        }
+        .feat-text { color:rgba(255,255,255,.75); font-size:.92em; line-height:1.7; }
+        .feat-text strong { color:white; }
+
+        /* ── Q&A ── */
+        .qa { background:var(--white); }
+        .qa-box {
+            background: linear-gradient(135deg, var(--navy) 0%, #2d4a8a 100%);
+            border-radius:24px;
+            padding:48px;
+            text-align:center;
+            color:white;
+        }
+        .qa-icon { font-size:3em; margin-bottom:16px; }
+        .qa-title { font-size:1.8em; font-weight:900; margin-bottom:12px; }
+        .qa-desc { color:rgba(255,255,255,.72); line-height:1.8; margin-bottom:32px; max-width:500px; margin-left:auto; margin-right:auto; }
+        .qa-form { display:flex; gap:12px; max-width:540px; margin:0 auto; flex-wrap:wrap; }
+        .qa-input {
+            flex:1; min-width:200px;
+            background:rgba(255,255,255,.1);
+            border:1px solid rgba(255,255,255,.2);
+            border-radius:50px; padding:13px 20px;
+            color:white; font-size:.95em;
+            outline:none;
+        }
+        .qa-input::placeholder { color:rgba(255,255,255,.4); }
+        .qa-input:focus { border-color:var(--gold); }
+        .qa-submit {
+            background:var(--gold); color:var(--navy);
+            border:none; border-radius:50px;
+            padding:13px 28px; font-weight:800; font-size:.95em;
+            cursor:pointer; transition:background .2s;
+        }
+        .qa-submit:hover { background:var(--gold-lt); }
+
+        /* ── 커뮤니티 / 통계 ── */
+        .stats { background:var(--light); }
+        .stats-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+            gap:24px; margin-bottom:48px;
+        }
+        .stat-card {
+            background:white; border-radius:16px;
+            padding:28px 20px; text-align:center;
+            box-shadow:0 4px 16px rgba(0,0,0,.06);
+        }
+        .stat-num {
+            font-size:2.4em; font-weight:900;
+            color:var(--navy); margin-bottom:4px;
+        }
+        .stat-num span { color:var(--gold); }
+        .stat-label { color:var(--gray); font-size:.88em; }
+
+        /* ── 푸터 ── */
+        footer {
+            background:var(--navy); color:rgba(255,255,255,.5);
+            padding:40px 24px; text-align:center;
+        }
+        .footer-logo { color:var(--gold); font-size:1.1em; font-weight:900; margin-bottom:10px; }
+        .footer-links { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-bottom:20px; }
+        .footer-links a { color:rgba(255,255,255,.5); text-decoration:none; font-size:.85em; }
+        .footer-links a:hover { color:var(--gold); }
+        .footer-copy { font-size:.8em; }
+
+        /* ── 모바일 ── */
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta { display:none; }
+            .hamburger { display:flex; }
+            .intro-grid { grid-template-columns:1fr; }
+            .intro-photo { aspect-ratio:1/1; }
+            .book-grid { grid-template-columns:1fr; }
+            .book-cover { max-width:240px; margin:0 auto; }
+            .qa-box { padding:32px 20px; }
+            nav { padding:0 16px; }
+        }
+
+        /* ── 모바일 메뉴 드로어 ── */
+        .drawer {
+            position:fixed; top:64px; left:0; right:0; bottom:0;
+            background:var(--navy); z-index:99;
+            padding:24px;
+            display:none; flex-direction:column; gap:4px;
+        }
+        .drawer.open { display:flex; }
+        .drawer a {
+            color:rgba(255,255,255,.8); text-decoration:none;
+            font-size:1.1em; font-weight:600;
+            padding:14px 0;
+            border-bottom:1px solid rgba(255,255,255,.06);
+        }
+        .drawer a:hover { color:var(--gold); }
+
+        /* 스크롤 애니 */
+        .fade-in { opacity:0; transform:translateY(30px); transition:opacity .6s ease, transform .6s ease; }
+        .fade-in.visible { opacity:1; transform:none; }
+    </style>
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav>
+    <div class="nav-logo">
+        사업하는 예수쟁이
+        <span>이강락 대표와 함께하는 비즈니스 신앙 플랫폼</span>
+    </div>
+    <ul class="nav-links">
+        <li><a href="#intro">소개</a></li>
+        <li><a href="#lectures">강의</a></li>
+        <li><a href="#columns">칼럼</a></li>
+        <li><a href="#book">도서</a></li>
+        <li><a href="#qa">Q&amp;A</a></li>
+    </ul>
+    <button class="nav-cta" onclick="scrollTo('#qa')">질문하기</button>
+    <div class="hamburger" onclick="toggleDrawer()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- 모바일 드로어 -->
+<div class="drawer" id="drawer">
+    <a href="#intro" onclick="closeDrawer()">소개</a>
+    <a href="#lectures" onclick="closeDrawer()">강의</a>
+    <a href="#columns" onclick="closeDrawer()">칼럼</a>
+    <a href="#book" onclick="closeDrawer()">도서</a>
+    <a href="#qa" onclick="closeDrawer()">Q&amp;A</a>
+</div>
+
+<!-- ① 히어로 -->
+<section class="hero" id="home">
+    <div class="hero-inner fade-in">
+        <div class="hero-tag">기독교 비즈니스 플랫폼</div>
+        <h1>사업에서 찾는<br><em>하나님의 뜻</em></h1>
+        <p class="hero-sub">
+            사업과 신앙, 두 가지를 모두 잘 하고 싶은 당신을 위한<br>
+            대한민국 최고의 기독교 경영 플랫폼입니다.
+        </p>
+        <p class="hero-quote">
+            "나는 사업을 일으키고자 했지만,<br>주님께서는 나를 일으키셨다!"<br>
+            <small style="opacity:.7">— 이강락 대표, 《사업하는 예수쟁이》</small>
+        </p>
+        <div class="hero-btns">
+            <a href="#lectures" class="btn-primary">강의 보러 가기</a>
+            <a href="#book" class="btn-outline">책 구입하기</a>
+        </div>
+    </div>
+</section>
+
+<!-- ② 이강락 대표 소개 -->
+<section class="intro" id="intro">
+    <div class="section-inner">
+        <div class="intro-grid fade-in">
+            <div class="intro-photo">
+                📷<br><small style="margin-top:8px;display:block">프로필 사진<br>준비 중</small>
+            </div>
+            <div class="intro-content">
+                <p class="section-tag">ABOUT</p>
+                <h2 class="intro-name">이강락 대표</h2>
+                <div class="intro-title-tag">(주)케이알컨설팅 대표 · CBMC 강사 · 장로</div>
+                <p class="intro-text">
+                    서울대학교와 KAIST에서 기계공학을 공부하고,
+                    현장 최전선에서 수백 개의 기업을 컨설팅해온 경영 전문가입니다.<br><br>
+                    '월드 베스트 기업 만들기' 강의를 통해 중소기업 대표들에게
+                    글로벌 스탠다드 경영 원칙과 성경적 경영 원리를 전수하고 있습니다.
+                    CBMC(한국기독실업인회) 강사로서 사업과 신앙의 통합을 실천하며
+                    선한영향력을 펼치고 있습니다.
+                </p>
+                <div class="intro-tags">
+                    <span class="tag">📚 월드베스트 기업만들기</span>
+                    <span class="tag">✝️ CBMC 강사</span>
+                    <span class="tag">🎬 이강락TV</span>
+                    <span class="tag">🏭 제조·서비스 컨설팅</span>
+                    <span class="tag">📖 저서: 사업하는 예수쟁이</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ③ 강의 -->
+<section class="lectures" id="lectures">
+    <div class="section-inner fade-in">
+        <p class="section-tag">LECTURES</p>
+        <h2 class="section-title">강의 & 영상 콘텐츠</h2>
+        <p class="section-desc">
+            30년 현장 경험과 성경적 경영 원리가 담긴 이강락 대표의 강의를 만나보세요.
+        </p>
+        <div class="card-grid">
+            <!-- 카드 1 -->
+            <div class="card">
+                <div class="card-thumb">
+                    <div class="card-play"></div>
+                </div>
+                <div class="card-body">
+                    <p class="card-cat">월드베스트 기업만들기</p>
+                    <p class="card-title">LEAN — 철저한 낭비제거로 수익을 2배로 만드는 법</p>
+                    <p class="card-meta">이강락 대표 · CBMC 4기 1강</p>
+                </div>
+            </div>
+            <!-- 카드 2 -->
+            <div class="card">
+                <div class="card-thumb">
+                    <div class="card-play"></div>
+                </div>
+                <div class="card-body">
+                    <p class="card-cat">비즈니스 선교 간증</p>
+                    <p class="card-title">크리스천 기업가의 생생한 간증 — 하나님이 일하시는 현장</p>
+                    <p class="card-meta">이강락 대표 · 평광교회 특별집회</p>
+                </div>
+            </div>
+            <!-- 카드 3 -->
+            <div class="card">
+                <div class="card-thumb">
+                    <div class="card-play"></div>
+                </div>
+                <div class="card-body">
+                    <p class="card-cat">재무/경영</p>
+                    <p class="card-title">대표의 이익관리 — 숫자를 모르면 경영이 아니다</p>
+                    <p class="card-meta">이강락 대표 · 이강락TV</p>
+                </div>
+            </div>
+            <!-- 카드 4 -->
+            <div class="card">
+                <div class="card-thumb">
+                    <div class="card-play"></div>
+                </div>
+                <div class="card-body">
+                    <p class="card-cat">조직/리더십</p>
+                    <p class="card-title">동기를 이끄는 법 — 직원이 스스로 움직이게 만드는 리더십</p>
+                    <p class="card-meta">이강락 대표 · 이강락TV</p>
+                </div>
+            </div>
+            <!-- 카드 5 -->
+            <div class="card">
+                <div class="card-thumb">
+                    <div class="card-play"></div>
+                </div>
+                <div class="card-body">
+                    <p class="card-cat">BSC / 전략</p>
+                    <p class="card-title">현재와 미래를 준비하는 법 — BSC로 우리 회사를 설계하라</p>
+                    <p class="card-meta">이강락 대표 · CBMC 4기</p>
+                </div>
+            </div>
+            <!-- 카드 6 -->
+            <div class="card">
+                <div class="card-thumb">
+                    <div class="card-play"></div>
+                </div>
+                <div class="card-body">
+                    <p class="card-cat">재무제표</p>
+                    <p class="card-title">재무제표 해석하기 — 숫자로 회사의 미래를 읽는다</p>
+                    <p class="card-meta">이강락 대표 · 이강락TV</p>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:36px;">
+            <a href="#" class="btn-primary">강의 전체 보기</a>
+        </div>
+    </div>
+</section>
+
+<!-- ④ 칼럼 -->
+<section class="columns" id="columns">
+    <div class="section-inner fade-in">
+        <p class="section-tag">COLUMN</p>
+        <h2 class="section-title">이강락 대표의 칼럼</h2>
+        <p class="section-desc">매일 SNS에 올라오는 이강락 대표의 경영·신앙 칼럼을 한곳에서 만나보세요.</p>
+        <div class="col-list">
+            <div class="col-item">
+                <div class="col-date">4월<br>03</div>
+                <div class="col-content">
+                    <p class="col-title">사업에서 하나님의 손길을 느끼는 순간들</p>
+                    <p class="col-preview">우리는 종종 사업이 힘들 때 하나님을 찾습니다. 하지만 사업이 잘 될 때에도 하나님을 기억하는 것이 진정한 크리스천 경영자의 모습입니다...</p>
+                    <span class="col-more">더 읽기 →</span>
+                </div>
+            </div>
+            <div class="col-item">
+                <div class="col-date">4월<br>02</div>
+                <div class="col-content">
+                    <p class="col-title">직원 한 명의 낭비가 회사 전체를 흔든다 — LEAN 경영 이야기</p>
+                    <p class="col-preview">낭비는 단순히 돈의 문제가 아닙니다. 직원의 시간과 에너지가 낭비될 때 조직 전체의 사기가 떨어지고, 결국 회사의 방향성도 흔들립니다...</p>
+                    <span class="col-more">더 읽기 →</span>
+                </div>
+            </div>
+            <div class="col-item">
+                <div class="col-date">4월<br>01</div>
+                <div class="col-content">
+                    <p class="col-title">월드 베스트 기업은 숫자를 두려워하지 않는다</p>
+                    <p class="col-preview">많은 중소기업 대표님들이 재무제표를 어려워합니다. 하지만 숫자를 모르면 경영을 하는 것이 아니라 운영을 하는 것입니다. 진정한 경영은 숫자에서 시작됩니다...</p>
+                    <span class="col-more">더 읽기 →</span>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:32px;">
+            <a href="#" class="btn-primary" style="background:var(--navy); color:white;">칼럼 전체 보기</a>
+        </div>
+    </div>
+</section>
+
+<!-- ⑤ 도서 -->
+<section class="book-section" id="book">
+    <div class="section-inner fade-in">
+        <div class="book-grid">
+            <div class="book-cover">
+                <div class="book-cover-img">
+                    📖 책 표지<br>이미지 준비 중
+                </div>
+                <div class="book-cover-title">사업하는<br>예수쟁이</div>
+                <div class="book-cover-author">이강락 지음 | 한스커뮤니케이션즈</div>
+                <div class="book-cover-sub">
+                    "나는 사업을 일으키고자 했지만,<br>주님께서는 나를 일으키셨다!"
+                </div>
+            </div>
+            <div class="book-info">
+                <p class="section-tag">BOOK</p>
+                <h2 class="section-title" style="color:white;">사업하는 예수쟁이</h2>
+                <p class="section-desc">
+                    30년 현장 컨설팅 경험과 신앙이 녹아든 책.<br>
+                    사업의 성공이 아니라, 하나님 안에서의 진정한 성장을 말합니다.
+                </p>
+                <div class="book-features">
+                    <div class="book-feat">
+                        <div class="feat-icon">✝️</div>
+                        <p class="feat-text"><strong>신앙과 사업의 통합</strong><br>크리스천으로서 어떻게 사업을 해야 하는지에 대한 실질적인 지침</p>
+                    </div>
+                    <div class="book-feat">
+                        <div class="feat-icon">📊</div>
+                        <p class="feat-text"><strong>현장 경험 30년의 결정체</strong><br>이론이 아닌 실제 기업에서 검증된 경영 원리</p>
+                    </div>
+                    <div class="book-feat">
+                        <div class="feat-icon">🙏</div>
+                        <p class="feat-text"><strong>선한영향력의 비밀</strong><br>사업을 통해 어떻게 하나님의 나라를 세울 수 있는지</p>
+                    </div>
+                </div>
+                <a href="#" class="btn-primary">책 구입하기 →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ⑥ 통계 -->
+<section class="stats">
+    <div class="section-inner fade-in">
+        <p class="section-tag">IMPACT</p>
+        <h2 class="section-title">선한영향력의 숫자</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-num">30<span>+</span></div>
+                <div class="stat-label">년 컨설팅 경력</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">4<span>기</span></div>
+                <div class="stat-label">월드베스트 기업만들기</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">30<span>강</span></div>
+                <div class="stat-label">심층 경영 커리큘럼</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">∞</div>
+                <div class="stat-label">하나님 안에서의 가능성</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ⑦ Q&A -->
+<section class="qa" id="qa">
+    <div class="section-inner fade-in">
+        <div class="qa-box">
+            <div class="qa-icon">💬</div>
+            <h2 class="qa-title">이강락 대표님께 직접 묻다</h2>
+            <p class="qa-desc">
+                사업 고민, 신앙과 경영의 균형, 직원 문제, 재무 고민…<br>
+                무엇이든 질문하세요. 이강락 대표님이 직접 답변드립니다.
+            </p>
+            <div class="qa-form">
+                <input class="qa-input" type="text" placeholder="이름을 입력해주세요" />
+                <input class="qa-input" type="text" placeholder="질문을 입력해주세요" style="flex:2;" />
+                <button class="qa-submit">질문 보내기</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 푸터 -->
+<footer>
+    <div class="footer-logo">사업하는 예수쟁이</div>
+    <div class="footer-links">
+        <a href="#">이강락TV 유튜브</a>
+        <a href="#">페이스북</a>
+        <a href="#">CBMC</a>
+        <a href="#">케이알컨설팅</a>
+        <a href="#">도서 구입</a>
+    </div>
+    <p class="footer-copy">© 2026 사업하는 예수쟁이 · (주)케이알컨설팅 이강락 대표<br>
+    플랫폼 제작: 꿈의식판 이석훈</p>
+</footer>
+
+<script>
+    // 햄버거 메뉴
+    function toggleDrawer() {
+        document.getElementById('drawer').classList.toggle('open');
+    }
+    function closeDrawer() {
+        document.getElementById('drawer').classList.remove('open');
+    }
+
+    // 스크롤 페이드인
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // 부드러운 스크롤
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const t = document.querySelector(a.getAttribute('href'));
+            if (t) { e.preventDefault(); t.scrollIntoView({ behavior:'smooth', block:'start' }); }
+        });
+    });
+</script>
+</body>
+</html>
