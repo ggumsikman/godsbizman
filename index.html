@@ -354,44 +354,253 @@
         }
         .btn-paper-line:hover { border-color:rgba(255,255,255,.7); color:white; }
 
-        /* ══ Q&A ══ */
+        /* ══ Q&A 게시판 ══ */
         .qa { padding: 96px 0; background: var(--warm); }
-        .qa-inner {
-            border:1px solid var(--line);
-            padding:52px 48px;
+
+        /* 게시판 헤더 */
+        .board-top {
+            display:flex; justify-content:space-between; align-items:flex-end;
+            margin-bottom:28px; flex-wrap:wrap; gap:16px;
+        }
+        .board-count { font-size:.88em; color:var(--gray); }
+        .board-write-btn {
+            background:var(--ink); color:var(--paper);
+            border:none; border-radius:3px;
+            padding:10px 22px; font-size:.88em; font-weight:700;
+            cursor:pointer; font-family:inherit; transition:opacity .2s;
+        }
+        .board-write-btn:hover { opacity:.75; }
+
+        /* 글쓰기 폼 */
+        .board-form {
             background:var(--paper);
-            max-width:680px; margin:0 auto;
-            text-align:center;
+            border:1px solid var(--line);
+            border-radius:4px;
+            padding:28px;
+            margin-bottom:24px;
+            display:none;
         }
-        .qa-divider {
-            display:flex; align-items:center; gap:16px; margin-bottom:32px;
-        }
-        .qa-divider::before, .qa-divider::after {
-            content:''; flex:1; height:1px; background:var(--line);
-        }
-        .qa-divider span { font-size:.75em; color:var(--gray-lt); letter-spacing:2px; }
-        .qa-title { font-size:1.7em; font-weight:900; margin-bottom:10px; }
-        .qa-desc { color:var(--gray); line-height:1.9; margin-bottom:32px; font-size:.95em; }
-        .qa-fields { display:flex; flex-direction:column; gap:12px; text-align:left; }
-        .qa-input, .qa-textarea {
+        .board-form.open { display:block; }
+        .board-form h3 { font-size:1em; font-weight:700; margin-bottom:18px; }
+        .form-row { display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+        .form-row input, .form-row textarea, .form-field {
             width:100%;
             background:var(--warm); border:1px solid var(--line);
-            border-radius:3px; padding:12px 16px;
-            font-size:.95em; color:var(--ink);
+            border-radius:3px; padding:11px 14px;
+            font-size:.9em; color:var(--ink);
             font-family:inherit; outline:none;
             transition:border-color .2s;
         }
-        .qa-input:focus, .qa-textarea:focus { border-color:var(--ink); }
-        .qa-textarea { resize:vertical; min-height:110px; }
-        .qa-submit {
-            width:100%; margin-top:8px;
+        .form-row input:focus, .form-row textarea:focus, .form-field:focus { border-color:var(--ink); }
+        .form-row input { flex:1; min-width:140px; }
+        .form-row textarea { resize:vertical; min-height:100px; }
+        .form-bottom {
+            display:flex; justify-content:space-between;
+            align-items:center; margin-top:14px; flex-wrap:wrap; gap:12px;
+        }
+        .lock-toggle {
+            display:flex; align-items:center; gap:8px;
+            font-size:.88em; color:var(--ink-soft); cursor:pointer;
+            user-select:none;
+        }
+        .lock-toggle input[type=checkbox] { width:16px; height:16px; cursor:pointer; accent-color:var(--ink); }
+        .lock-hint { font-size:.78em; color:var(--gray); margin-top:4px; }
+        .form-submit {
             background:var(--ink); color:var(--paper);
             border:none; border-radius:3px;
-            padding:14px; font-size:.95em; font-weight:700;
-            cursor:pointer; font-family:inherit;
-            transition:opacity .2s;
+            padding:11px 28px; font-size:.9em; font-weight:700;
+            cursor:pointer; font-family:inherit; transition:opacity .2s;
         }
-        .qa-submit:hover { opacity:.75; }
+        .form-submit:hover { opacity:.75; }
+        .form-cancel {
+            background:none; border:1px solid var(--line);
+            border-radius:3px; padding:10px 20px;
+            font-size:.88em; color:var(--gray);
+            cursor:pointer; font-family:inherit; transition:border-color .2s;
+        }
+        .form-cancel:hover { border-color:var(--ink); color:var(--ink); }
+
+        /* 게시판 테이블 헤더 */
+        .board-table-head {
+            display:grid;
+            grid-template-columns: 52px 1fr 80px 96px 80px;
+            gap:0; padding:10px 16px;
+            background:var(--ink); color:var(--paper);
+            font-size:.8em; font-weight:700; letter-spacing:.5px;
+            border-radius:3px 3px 0 0;
+        }
+        .board-table-head span { text-align:center; }
+        .board-table-head span:nth-child(2) { text-align:left; padding-left:4px; }
+
+        /* 게시물 행 */
+        .board-item {
+            border-bottom:1px solid var(--line);
+            background:var(--paper);
+            cursor:pointer;
+            transition:background .15s;
+        }
+        .board-item:hover { background:#F5F0E5; }
+        .board-item-row {
+            display:grid;
+            grid-template-columns: 52px 1fr 80px 96px 80px;
+            gap:0; padding:14px 16px;
+            align-items:center;
+        }
+        .bi-num { font-size:.82em; color:var(--gray-lt); text-align:center; }
+        .bi-title {
+            font-size:.95em; font-weight:600; color:var(--ink);
+            display:flex; align-items:center; gap:8px;
+            padding-left:4px;
+        }
+        .bi-title .private-badge {
+            font-size:.72em; color:var(--gray);
+            border:1px solid var(--line); border-radius:3px;
+            padding:1px 6px; white-space:nowrap;
+        }
+        .bi-title .new-badge {
+            font-size:.7em; background:#c0392b; color:white;
+            border-radius:3px; padding:1px 6px;
+        }
+        .bi-name { font-size:.85em; color:var(--gray); text-align:center; }
+        .bi-date { font-size:.8em; color:var(--gray-lt); text-align:center; }
+        .bi-status { text-align:center; font-size:.8em; }
+        .status-answered {
+            display:inline-block;
+            background:var(--ink); color:var(--paper);
+            border-radius:3px; padding:2px 8px; font-size:.75em;
+        }
+        .status-waiting {
+            display:inline-block;
+            border:1px solid var(--line); color:var(--gray);
+            border-radius:3px; padding:2px 8px; font-size:.75em;
+        }
+
+        /* 게시물 상세 (아코디언) */
+        .board-detail {
+            display:none;
+            background:var(--cream);
+            border-bottom:1px solid var(--line);
+            padding:24px 28px;
+        }
+        .board-detail.open { display:block; }
+        .detail-private-msg {
+            display:flex; flex-direction:column; align-items:center;
+            padding:32px 0; color:var(--gray); gap:10px; font-size:.95em;
+        }
+        .detail-private-msg .lock-icon { font-size:2em; }
+        .detail-unlock-form { display:flex; gap:10px; margin-top:8px; }
+        .detail-unlock-input {
+            background:var(--paper); border:1px solid var(--line);
+            border-radius:3px; padding:9px 14px;
+            font-size:.88em; color:var(--ink);
+            font-family:inherit; outline:none; width:160px;
+        }
+        .detail-unlock-btn {
+            background:var(--ink); color:var(--paper);
+            border:none; border-radius:3px;
+            padding:9px 18px; font-size:.85em; font-weight:700;
+            cursor:pointer; font-family:inherit;
+        }
+        .detail-q-label { font-size:.75em; color:var(--gray); font-weight:700; letter-spacing:1px; margin-bottom:8px; }
+        .detail-q-content {
+            font-size:.95em; line-height:1.9; color:var(--ink-soft);
+            padding-bottom:20px; border-bottom:1px solid var(--line);
+            margin-bottom:20px; white-space:pre-wrap;
+        }
+        .detail-answer {
+            background:var(--paper);
+            border-left:3px solid var(--ink);
+            padding:18px 20px;
+            margin-top:4px;
+        }
+        .detail-a-label {
+            font-size:.75em; font-weight:700; letter-spacing:1px;
+            color:var(--ink); margin-bottom:8px; display:flex; align-items:center; gap:8px;
+        }
+        .detail-a-content { font-size:.93em; line-height:1.9; color:var(--ink-soft); white-space:pre-wrap; }
+        .detail-no-answer { font-size:.88em; color:var(--gray-lt); padding:14px 0; }
+
+        /* 관리자 답변 폼 */
+        .admin-answer-form { margin-top:16px; display:none; }
+        .admin-answer-form.open { display:block; }
+        .admin-answer-form textarea {
+            width:100%; background:var(--warm); border:1px solid var(--line);
+            border-radius:3px; padding:11px 14px; font-size:.9em;
+            color:var(--ink); font-family:inherit; outline:none;
+            resize:vertical; min-height:90px; margin-bottom:10px;
+        }
+        .admin-answer-form textarea:focus { border-color:var(--ink); }
+        .admin-btns { display:flex; gap:10px; }
+        .btn-admin-save {
+            background:var(--ink); color:var(--paper); border:none;
+            border-radius:3px; padding:9px 20px; font-size:.85em; font-weight:700;
+            cursor:pointer; font-family:inherit;
+        }
+        .btn-admin-cancel {
+            background:none; border:1px solid var(--line); border-radius:3px;
+            padding:8px 16px; font-size:.85em; color:var(--gray);
+            cursor:pointer; font-family:inherit;
+        }
+
+        /* 관리자 모드 바 */
+        .admin-bar {
+            background:var(--ink); color:rgba(255,255,255,.6);
+            font-size:.8em; padding:8px 20px;
+            display:flex; align-items:center; gap:12px;
+            border-radius:3px; margin-bottom:20px;
+        }
+        .admin-bar span { color:rgba(255,255,255,.9); font-weight:700; }
+        .admin-logout {
+            margin-left:auto; background:none;
+            border:1px solid rgba(255,255,255,.2); border-radius:3px;
+            color:rgba(255,255,255,.5); padding:3px 10px; font-size:.85em;
+            cursor:pointer; font-family:inherit;
+        }
+
+        /* 빈 게시판 */
+        .board-empty {
+            text-align:center; padding:56px 0;
+            color:var(--gray-lt); font-size:.95em;
+            border-bottom:1px solid var(--line);
+            background:var(--paper);
+        }
+
+        /* 관리자 로그인 팝업 */
+        .modal-bg {
+            display:none; position:fixed; inset:0;
+            background:rgba(0,0,0,.5); z-index:300;
+            align-items:center; justify-content:center;
+        }
+        .modal-bg.open { display:flex; }
+        .modal {
+            background:var(--paper); border-radius:6px;
+            padding:36px 32px; width:320px; text-align:center;
+        }
+        .modal h3 { font-size:1.1em; font-weight:700; margin-bottom:6px; }
+        .modal p { font-size:.85em; color:var(--gray); margin-bottom:20px; }
+        .modal input {
+            width:100%; background:var(--warm); border:1px solid var(--line);
+            border-radius:3px; padding:11px 14px; font-size:.95em;
+            color:var(--ink); font-family:inherit; outline:none; margin-bottom:12px;
+        }
+        .modal input:focus { border-color:var(--ink); }
+        .modal-ok {
+            width:100%; background:var(--ink); color:var(--paper);
+            border:none; border-radius:3px; padding:12px;
+            font-size:.95em; font-weight:700; cursor:pointer; font-family:inherit;
+        }
+        .modal-cancel {
+            display:block; margin-top:10px; font-size:.82em;
+            color:var(--gray); cursor:pointer; background:none; border:none;
+            font-family:inherit; width:100%;
+        }
+
+        @media(max-width:640px) {
+            .board-table-head { grid-template-columns: 40px 1fr 64px 0 64px; }
+            .board-table-head span:nth-child(4) { display:none; }
+            .board-item-row  { grid-template-columns: 40px 1fr 64px 0 64px; }
+            .bi-date { display:none; }
+        }
 
         /* ══ 선한영향력 ══ */
         .impact { padding: 96px 0; background: var(--paper); }
@@ -763,25 +972,81 @@
 
 <hr class="divider">
 
-<!-- ⑦ Q&A -->
+<!-- ⑦ Q&A 게시판 -->
 <section class="qa" id="qa">
     <div class="inner reveal">
-        <div class="qa-inner">
-            <div class="qa-divider"><span>Q &amp; A</span></div>
-            <h2 class="qa-title">이강락 대표님께<br>직접 묻다</h2>
-            <p class="qa-desc">
-                사업 고민, 신앙과 경영의 균형, 직원 문제, 재무…<br>
-                무엇이든 질문하세요. 이강락 대표님이 직접 답변드립니다.
-            </p>
-            <div class="qa-fields">
-                <input  class="qa-input"    type="text"  placeholder="이름" />
-                <input  class="qa-input"    type="text"  placeholder="연락처 (선택)" />
-                <textarea class="qa-textarea"            placeholder="질문을 자유롭게 적어주세요."></textarea>
-                <button class="qa-submit">질문 보내기</button>
+        <div class="water-line"><span>Q &amp; A</span></div>
+        <h2 class="brush-title">이강락 대표님께<br>직접 묻다</h2>
+        <p class="body-text" style="margin-bottom:36px;">
+            사업 고민, 신앙과 경영의 균형, 직원 문제, 재무…<br>
+            무엇이든 질문하세요. 이강락 대표님이 직접 답변드립니다.
+        </p>
+
+        <!-- 관리자 모드 바 -->
+        <div class="admin-bar" id="adminBar" style="display:none;">
+            <span>관리자 모드</span> · 이강락 대표님으로 접속 중입니다.
+            <button class="admin-logout" onclick="adminLogout()">로그아웃</button>
+        </div>
+
+        <!-- 게시판 헤더 -->
+        <div class="board-top">
+            <span class="board-count" id="boardCount">전체 0건</span>
+            <div style="display:flex; gap:10px;">
+                <button class="form-cancel" onclick="openAdminLogin()" id="adminLoginBtn">관리자</button>
+                <button class="board-write-btn" onclick="toggleForm()">✏️ 질문하기</button>
             </div>
         </div>
+
+        <!-- 글쓰기 폼 -->
+        <div class="board-form" id="boardForm">
+            <h3>질문 작성</h3>
+            <div class="form-row">
+                <input type="text" id="fName" placeholder="이름 (필수)" />
+                <input type="password" id="fPw" placeholder="비밀번호 (비공개 질문용)" />
+            </div>
+            <div class="form-row">
+                <input type="text" id="fTitle" placeholder="제목" style="flex:2;" />
+            </div>
+            <div class="form-row">
+                <textarea id="fContent" placeholder="질문 내용을 자유롭게 적어주세요."></textarea>
+            </div>
+            <div class="form-bottom">
+                <div>
+                    <label class="lock-toggle">
+                        <input type="checkbox" id="fPrivate">
+                        🔒 비공개 질문 (내용을 다른 사람에게 숨깁니다)
+                    </label>
+                    <p class="lock-hint">비공개 설정 시 위에 입력한 비밀번호로 내용을 확인할 수 있습니다.</p>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="form-cancel" onclick="toggleForm()">취소</button>
+                    <button class="form-submit" onclick="submitPost()">질문 등록</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 게시판 테이블 -->
+        <div class="board-table-head">
+            <span>번호</span>
+            <span>제목 / 질문</span>
+            <span>작성자</span>
+            <span>날짜</span>
+            <span>답변</span>
+        </div>
+        <div id="boardList"></div>
     </div>
 </section>
+
+<!-- 관리자 로그인 모달 -->
+<div class="modal-bg" id="adminModal">
+    <div class="modal">
+        <h3>🔑 관리자 로그인</h3>
+        <p>이강락 대표님 전용 페이지입니다.</p>
+        <input type="password" id="adminPwInput" placeholder="비밀번호" onkeydown="if(event.key==='Enter')doAdminLogin()" />
+        <button class="modal-ok" onclick="doAdminLogin()">확인</button>
+        <button class="modal-cancel" onclick="closeAdminModal()">취소</button>
+    </div>
+</div>
 
 <!-- 푸터 -->
 <footer>
@@ -805,14 +1070,245 @@
 </footer>
 
 <script>
+    /* ── 네비 ── */
     function toggleDrawer() { document.getElementById('drawer').classList.toggle('open'); }
     function closeDrawer()  { document.getElementById('drawer').classList.remove('open'); }
 
-    // 스크롤 reveal
+    /* ── 스크롤 reveal ── */
     const io = new IntersectionObserver(entries => {
         entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ════════════════════════════
+       Q&A 게시판
+    ════════════════════════════ */
+    const ADMIN_PW  = 'jesusbizman2026';   // 관리자 비밀번호
+    const STORE_KEY = 'godsbizman_qa';
+
+    let isAdmin   = false;
+    let openId    = null;   // 현재 펼쳐진 게시물 id
+
+    /* 데이터 ── */
+    function loadPosts() {
+        try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+        catch { return []; }
+    }
+    function savePosts(posts) {
+        localStorage.setItem(STORE_KEY, JSON.stringify(posts));
+    }
+
+    /* 날짜 ── */
+    function fmtDate(ts) {
+        const d = new Date(ts);
+        return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    /* 렌더 ── */
+    function render() {
+        const posts = loadPosts();
+        document.getElementById('boardCount').textContent = `전체 ${posts.length}건`;
+
+        const list = document.getElementById('boardList');
+        if (!posts.length) {
+            list.innerHTML = '<div class="board-empty">아직 질문이 없습니다.<br>첫 번째 질문을 남겨보세요!</div>';
+            return;
+        }
+
+        list.innerHTML = posts.slice().reverse().map((p, i) => {
+            const num   = posts.length - i;
+            const isNew = (Date.now() - p.id) < 86400000;
+            const priv  = p.isPrivate;
+            const title = priv ? '🔒 비공개 질문입니다.' : (p.title || p.content.slice(0, 40) + (p.content.length > 40 ? '…' : ''));
+            const answered = p.answer ? `<span class="status-answered">답변완료</span>` : `<span class="status-waiting">대기중</span>`;
+
+            const detailHtml = buildDetail(p);
+
+            return `
+            <div class="board-item" id="item-${p.id}">
+                <div class="board-item-row" onclick="toggleDetail(${p.id})">
+                    <span class="bi-num">${num}</span>
+                    <span class="bi-title">
+                        ${title}
+                        ${isNew ? '<span class="new-badge">NEW</span>' : ''}
+                        ${priv ? '<span class="private-badge">🔒 비공개</span>' : ''}
+                    </span>
+                    <span class="bi-name">${p.name}</span>
+                    <span class="bi-date">${fmtDate(p.id)}</span>
+                    <span class="bi-status">${answered}</span>
+                </div>
+                <div class="board-detail ${openId === p.id ? 'open' : ''}" id="detail-${p.id}">
+                    ${detailHtml}
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function buildDetail(p) {
+        const priv = p.isPrivate;
+
+        // 비공개인데 비관리자 → 비밀번호 입력 UI
+        if (priv && !isAdmin) {
+            return `
+            <div class="detail-private-msg">
+                <span class="lock-icon">🔒</span>
+                비공개 질문입니다. 비밀번호를 입력하면 내용을 확인할 수 있습니다.
+                <div class="detail-unlock-form">
+                    <input class="detail-unlock-input" type="password"
+                           placeholder="비밀번호" id="unlock-${p.id}"
+                           onkeydown="if(event.key==='Enter') unlockPost(${p.id})">
+                    <button class="detail-unlock-btn" onclick="unlockPost(${p.id})">확인</button>
+                </div>
+            </div>`;
+        }
+
+        const answerBlock = p.answer
+            ? `<div class="detail-answer">
+                   <div class="detail-a-label">✍️ 이강락 대표님 답변 <small style="font-weight:400; color:var(--gray)">${fmtDate(p.answeredAt)}</small></div>
+                   <div class="detail-a-content">${escHtml(p.answer)}</div>
+               </div>`
+            : `<div class="detail-no-answer">아직 답변이 등록되지 않았습니다. 곧 답변드리겠습니다.</div>`;
+
+        const adminBtn = isAdmin
+            ? `<button style="font-size:.8em; background:none; border:1px solid var(--line); border-radius:3px; padding:5px 12px; cursor:pointer; margin-top:14px; font-family:inherit;"
+                       onclick="toggleAnswerForm(${p.id})">
+                   ${p.answer ? '답변 수정' : '답변 달기'}
+               </button>
+               <div class="admin-answer-form" id="af-${p.id}">
+                   <textarea placeholder="답변을 입력하세요...">${p.answer || ''}</textarea>
+                   <div class="admin-btns">
+                       <button class="btn-admin-save"   onclick="saveAnswer(${p.id})">저장</button>
+                       <button class="btn-admin-cancel" onclick="toggleAnswerForm(${p.id})">취소</button>
+                   </div>
+               </div>`
+            : '';
+
+        return `
+        <div class="detail-q-label">Q. 질문</div>
+        <div class="detail-q-content">${escHtml(p.title ? p.title + '\n\n' + p.content : p.content)}</div>
+        ${answerBlock}
+        ${adminBtn}`;
+    }
+
+    function escHtml(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    /* 게시물 펼치기/닫기 ── */
+    function toggleDetail(id) {
+        const prev = openId;
+        openId = (openId === id) ? null : id;
+        render();
+        if (openId) {
+            const el = document.getElementById(`item-${openId}`);
+            if (el) setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+        }
+    }
+
+    /* 비공개 해제 ── */
+    function unlockPost(id) {
+        const inp = document.getElementById(`unlock-${id}`);
+        const pw  = inp ? inp.value : '';
+        const posts = loadPosts();
+        const p = posts.find(x => x.id === id);
+        if (p && pw === p.password) {
+            // 일시 해제: isAdmin처럼 이 게시물만 보여주기
+            const detail = document.getElementById(`detail-${id}`);
+            if (detail) {
+                // 임시로 내용 렌더
+                const tmp = isAdmin;
+                isAdmin = true;
+                detail.innerHTML = buildDetail(p);
+                isAdmin = tmp;
+            }
+        } else {
+            alert('비밀번호가 일치하지 않습니다.');
+        }
+    }
+
+    /* 글쓰기 폼 ── */
+    function toggleForm() {
+        const f = document.getElementById('boardForm');
+        f.classList.toggle('open');
+        if (f.classList.contains('open')) {
+            document.getElementById('fName').focus();
+        }
+    }
+
+    function submitPost() {
+        const name    = document.getElementById('fName').value.trim();
+        const pw      = document.getElementById('fPw').value;
+        const title   = document.getElementById('fTitle').value.trim();
+        const content = document.getElementById('fContent').value.trim();
+        const priv    = document.getElementById('fPrivate').checked;
+
+        if (!name)    { alert('이름을 입력해주세요.'); document.getElementById('fName').focus(); return; }
+        if (!content) { alert('질문 내용을 입력해주세요.'); document.getElementById('fContent').focus(); return; }
+        if (priv && !pw) { alert('비공개 질문은 비밀번호를 입력해주세요.'); document.getElementById('fPw').focus(); return; }
+
+        const posts = loadPosts();
+        posts.push({ id: Date.now(), name, title, content, isPrivate: priv, password: pw, answer: null, answeredAt: null });
+        savePosts(posts);
+
+        // 폼 초기화
+        document.getElementById('fName').value    = '';
+        document.getElementById('fPw').value      = '';
+        document.getElementById('fTitle').value   = '';
+        document.getElementById('fContent').value = '';
+        document.getElementById('fPrivate').checked = false;
+        document.getElementById('boardForm').classList.remove('open');
+
+        render();
+        alert('질문이 등록되었습니다. 이강락 대표님이 곧 답변드리겠습니다. 🙏');
+    }
+
+    /* 답변 폼 ── */
+    function toggleAnswerForm(id) {
+        document.getElementById(`af-${id}`).classList.toggle('open');
+    }
+    function saveAnswer(id) {
+        const textarea = document.querySelector(`#af-${id} textarea`);
+        const answer = textarea.value.trim();
+        if (!answer) { alert('답변 내용을 입력해주세요.'); return; }
+        const posts = loadPosts();
+        const p = posts.find(x => x.id === id);
+        if (p) { p.answer = answer; p.answeredAt = Date.now(); }
+        savePosts(posts);
+        render();
+    }
+
+    /* 관리자 로그인/아웃 ── */
+    function openAdminLogin() {
+        if (isAdmin) { adminLogout(); return; }
+        document.getElementById('adminModal').classList.add('open');
+        setTimeout(() => document.getElementById('adminPwInput').focus(), 100);
+    }
+    function closeAdminModal() {
+        document.getElementById('adminModal').classList.remove('open');
+        document.getElementById('adminPwInput').value = '';
+    }
+    function doAdminLogin() {
+        const pw = document.getElementById('adminPwInput').value;
+        if (pw === ADMIN_PW) {
+            isAdmin = true;
+            document.getElementById('adminBar').style.display = 'flex';
+            document.getElementById('adminLoginBtn').textContent = '관리자 로그아웃';
+            closeAdminModal();
+            render();
+        } else {
+            alert('비밀번호가 올바르지 않습니다.');
+            document.getElementById('adminPwInput').value = '';
+        }
+    }
+    function adminLogout() {
+        isAdmin = false;
+        document.getElementById('adminBar').style.display = 'none';
+        document.getElementById('adminLoginBtn').textContent = '관리자';
+        render();
+    }
+
+    /* 초기 렌더 ── */
+    render();
 </script>
 </body>
 </html>
