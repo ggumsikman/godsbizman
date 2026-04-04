@@ -5,7 +5,7 @@
 - **GitHub 레포**: https://github.com/ggumsikman/godsbizman
 - **라이브 URL**: https://ggumsikman.github.io/godsbizman
 - **로컬 경로**: `C:\Users\leese\jesusbiz-platform\`
-- **제작자**: 꿈의식판 꿈식맨 (이석훈)
+- **제작자**: 꿈식판 꿈식맨 (이석훈)
 
 ## 주인공
 **이강락 대표 (李康洛)**
