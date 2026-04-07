@@ -1466,7 +1466,7 @@
                 <input type="password" id="fPw" placeholder="비밀번호 (수정/삭제 시 필요)" maxlength="20">
             </div>
             <div class="form-row">
-                <input type="text" id="fTitle" placeholder="제목 (선택)" maxlength="100">
+                <input type="text" id="fTitle" placeholder="제목" maxlength="100">
             </div>
             <div class="form-row">
                 <textarea id="fContent" placeholder="질문 내용을 입력하세요..." rows="4"></textarea>
@@ -1695,6 +1695,7 @@
 
         if (!name)    { alert('이름을 입력해주세요.'); document.getElementById('fName').focus(); return; }
         if (!pw)      { alert('비밀번호를 입력해주세요.'); document.getElementById('fPw').focus(); return; }
+        if (!title)   { alert('제목을 입력해주세요.'); document.getElementById('fTitle').focus(); return; }
         if (!content) { alert('질문 내용을 입력해주세요.'); document.getElementById('fContent').focus(); return; }
 
         const posts = loadPosts();
