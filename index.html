@@ -557,6 +557,73 @@
             cursor:pointer; font-family:inherit;
         }
 
+        /* 수정/삭제 버튼 */
+        .post-actions { display:flex; gap:8px; margin-top:14px; }
+        .btn-edit, .btn-delete {
+            font-size:.8em; background:none; border:1px solid var(--line);
+            border-radius:3px; padding:5px 12px; cursor:pointer;
+            font-family:inherit; color:var(--gray); transition:border-color .2s, color .2s;
+        }
+        .btn-edit:hover { border-color:var(--ink); color:var(--ink); }
+        .btn-delete:hover { border-color:#c0392b; color:#c0392b; }
+
+        /* 비밀번호 확인 팝업 */
+        .pw-confirm {
+            display:none; margin-top:10px; padding:12px;
+            background:var(--paper); border:1px solid var(--line); border-radius:4px;
+        }
+        .pw-confirm.open { display:flex; gap:8px; align-items:center; }
+        .pw-confirm input {
+            background:var(--warm); border:1px solid var(--line);
+            border-radius:3px; padding:8px 12px; font-size:.88em;
+            font-family:inherit; outline:none; width:160px;
+        }
+        .pw-confirm input:focus { border-color:var(--ink); }
+        .pw-confirm button {
+            background:var(--ink); color:var(--paper); border:none;
+            border-radius:3px; padding:8px 16px; font-size:.82em;
+            font-weight:700; cursor:pointer; font-family:inherit;
+        }
+        .pw-confirm .pw-cancel {
+            background:none; border:1px solid var(--line); color:var(--gray); font-weight:400;
+        }
+
+        /* 수정 폼 */
+        .edit-form { display:none; margin-top:14px; }
+        .edit-form.open { display:block; }
+        .edit-form input, .edit-form textarea {
+            width:100%; background:var(--warm); border:1px solid var(--line);
+            border-radius:3px; padding:10px 14px; font-size:.9em;
+            color:var(--ink); font-family:inherit; outline:none; margin-bottom:8px;
+        }
+        .edit-form textarea { resize:vertical; min-height:80px; }
+        .edit-form input:focus, .edit-form textarea:focus { border-color:var(--ink); }
+
+        /* 플로팅 관리자 표시 */
+        .admin-float {
+            display:none; position:fixed; bottom:24px; right:24px; z-index:300;
+            background:var(--ink); color:var(--paper);
+            border-radius:50px; padding:10px 20px;
+            font-size:.82em; font-weight:700;
+            box-shadow:0 4px 16px rgba(0,0,0,.3);
+            cursor:pointer; transition:opacity .2s;
+            align-items:center; gap:10px;
+        }
+        .admin-float.on { display:flex; }
+        .admin-float:hover { opacity:.85; }
+        .admin-float-dot {
+            width:8px; height:8px; border-radius:50%;
+            background:#27ae60; animation:pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity:1; }
+            50% { opacity:.4; }
+        }
+        .admin-float-close {
+            background:none; border:none; color:rgba(255,255,255,.5);
+            font-size:1em; cursor:pointer; margin-left:4px; font-family:inherit;
+        }
+
         /* 빈 게시판 */
         .board-empty {
             text-align:center; padding:56px 0;
@@ -780,6 +847,12 @@
             .book-cover-wrap { max-width:200px; margin:0 auto; }
             .qa-inner { padding:36px 24px; }
             .footer-inner { flex-direction:column; }
+
+            .session-header { flex-direction:column; align-items:flex-start; gap:10px; }
+            .session-meta { width:100%; }
+            .session-info { margin-left:0; }
+            .session-toggle { position:absolute; right:20px; top:22px; }
+            .session-header { position:relative; }
         }
     </style>
 </head>
@@ -1379,28 +1452,54 @@
             무엇이든 질문하세요. 이강락 대표님이 직접 답변드립니다.
         </p>
 
-        <!-- 준비 중 안내 -->
-        <div style="
-            border:1px solid var(--line);
-            background:var(--paper);
-            border-radius:4px;
-            padding:52px 32px;
-            text-align:center;
-        ">
-            <div style="font-size:2.2em; margin-bottom:16px;">🛠️</div>
-            <p style="font-size:1.05em; font-weight:700; color:var(--ink); margin-bottom:10px;">
-                Q&amp;A 게시판 준비 중입니다
-            </p>
-            <p style="font-size:.92em; color:var(--gray); line-height:1.9;">
-                이강락 대표님과 직접 소통할 수 있는 Q&amp;A 공간을 준비하고 있습니다.<br>
-                오픈 시 안내드리겠습니다.
-            </p>
-            <div style="margin-top:28px; display:inline-block; border:1px solid var(--line); border-radius:50px; padding:7px 22px; font-size:.8em; color:var(--gray-lt); letter-spacing:1px;">
-                COMING SOON
+        <!-- 게시판 -->
+        <div class="board-top">
+            <span class="board-count" id="boardCount">전체 0건</span>
+            <button class="board-write-btn" onclick="toggleForm()">질문하기</button>
+        </div>
+
+        <!-- 글쓰기 폼 -->
+        <div class="board-form" id="boardForm">
+            <h3>질문 남기기</h3>
+            <div class="form-row">
+                <input type="text" id="fName" placeholder="이름" maxlength="20">
+                <input type="password" id="fPw" placeholder="비밀번호 (수정/삭제 시 필요)" maxlength="20">
+            </div>
+            <div class="form-row">
+                <input type="text" id="fTitle" placeholder="제목 (선택)" maxlength="100">
+            </div>
+            <div class="form-row">
+                <textarea id="fContent" placeholder="질문 내용을 입력하세요..." rows="4"></textarea>
+            </div>
+            <div class="form-bottom">
+                <span style="font-size:.78em; color:var(--gray);">비밀번호는 질문 수정·삭제 시 사용됩니다.</span>
+                <div style="display:flex; gap:8px;">
+                    <button class="form-cancel" onclick="toggleForm()">취소</button>
+                    <button class="form-submit" onclick="submitPost()">등록</button>
+                </div>
             </div>
         </div>
+
+        <!-- 게시판 헤더 -->
+        <div class="board-table-head">
+            <span>번호</span>
+            <span>제목</span>
+            <span>작성자</span>
+            <span>날짜</span>
+            <span>상태</span>
+        </div>
+
+        <!-- 게시물 목록 -->
+        <div id="boardList"></div>
     </div>
 </section>
+
+<!-- 플로팅 관리자 표시 -->
+<div class="admin-float" id="adminFloat" onclick="adminLogout()">
+    <span class="admin-float-dot"></span>
+    관리자 모드
+    <button class="admin-float-close" title="로그아웃">✕</button>
+</div>
 
 <!-- 관리자 로그인 모달 -->
 <div class="modal-bg" id="adminModal">
@@ -1419,7 +1518,7 @@
         <div>
             <p class="footer-brand">사업하는 예수쟁이</p>
             <p style="color:rgba(255,255,255,.35); font-size:.85em; margin-bottom:6px;">케이알컨설팅(주) 이강락 대표</p>
-            <p class="footer-made">플랫폼 제작 · 꿈식판 꿈식맨</p>
+            <p class="footer-made">플랫폼 제작 · <a href="javascript:void(0)" onclick="openAdminLogin()" style="color:inherit; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,.2);">꿈식판 꿈식맨</a></p>
         </div>
         <div class="footer-links">
             <a href="https://www.youtube.com/@leekrtv"                        target="_blank">▶ 이강락TV 유튜브</a>
@@ -1456,11 +1555,11 @@
     /* ════════════════════════════
        Q&A 게시판
     ════════════════════════════ */
-    const ADMIN_PW  = '1234';   // 관리자 비밀번호
+    const ADMIN_PW  = '1234';
     const STORE_KEY = 'godsbizman_qa';
 
-    let isAdmin   = false;
-    let openId    = null;   // 현재 펼쳐진 게시물 id
+    let isAdmin = false;
+    let openId  = null;
 
     /* 데이터 ── */
     function loadPosts() {
@@ -1475,6 +1574,9 @@
     function fmtDate(ts) {
         const d = new Date(ts);
         return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    }
+    function escHtml(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
     /* 렌더 ── */
@@ -1491,66 +1593,70 @@
         list.innerHTML = posts.slice().reverse().map((p, i) => {
             const num   = posts.length - i;
             const isNew = (Date.now() - p.id) < 86400000;
-            const priv  = p.isPrivate;
-            const title = priv ? '🔒 비공개 질문입니다.' : (p.title || p.content.slice(0, 40) + (p.content.length > 40 ? '…' : ''));
-            const answered = p.answer ? `<span class="status-answered">답변완료</span>` : `<span class="status-waiting">대기중</span>`;
-
-            const detailHtml = buildDetail(p);
+            const title = p.title || p.content.slice(0, 40) + (p.content.length > 40 ? '…' : '');
+            const answered = p.answer
+                ? '<span class="status-answered">답변완료</span>'
+                : '<span class="status-waiting">대기중</span>';
 
             return `
             <div class="board-item" id="item-${p.id}">
                 <div class="board-item-row" onclick="toggleDetail(${p.id})">
                     <span class="bi-num">${num}</span>
                     <span class="bi-title">
-                        ${title}
+                        ${escHtml(title)}
                         ${isNew ? '<span class="new-badge">NEW</span>' : ''}
-                        ${priv ? '<span class="private-badge">🔒 비공개</span>' : ''}
                     </span>
-                    <span class="bi-name">${p.name}</span>
+                    <span class="bi-name">${escHtml(p.name)}</span>
                     <span class="bi-date">${fmtDate(p.id)}</span>
                     <span class="bi-status">${answered}</span>
                 </div>
                 <div class="board-detail ${openId === p.id ? 'open' : ''}" id="detail-${p.id}">
-                    ${detailHtml}
+                    ${buildDetail(p)}
                 </div>
             </div>`;
         }).join('');
     }
 
     function buildDetail(p) {
-        const priv = p.isPrivate;
-
-        // 비공개인데 비관리자 → 비밀번호 입력 UI
-        if (priv && !isAdmin) {
-            return `
-            <div class="detail-private-msg">
-                <span class="lock-icon">🔒</span>
-                비공개 질문입니다. 비밀번호를 입력하면 내용을 확인할 수 있습니다.
-                <div class="detail-unlock-form">
-                    <input class="detail-unlock-input" type="password"
-                           placeholder="비밀번호" id="unlock-${p.id}"
-                           onkeydown="if(event.key==='Enter') unlockPost(${p.id})">
-                    <button class="detail-unlock-btn" onclick="unlockPost(${p.id})">확인</button>
-                </div>
-            </div>`;
-        }
-
+        // 답변 블록
         const answerBlock = p.answer
             ? `<div class="detail-answer">
-                   <div class="detail-a-label">✍️ 이강락 대표님 답변 <small style="font-weight:400; color:var(--gray)">${fmtDate(p.answeredAt)}</small></div>
+                   <div class="detail-a-label">✍️ 이강락 대표님 답변 <small style="font-weight:400;color:var(--gray)">${fmtDate(p.answeredAt)}</small></div>
                    <div class="detail-a-content">${escHtml(p.answer)}</div>
                </div>`
-            : `<div class="detail-no-answer">아직 답변이 등록되지 않았습니다. 곧 답변드리겠습니다.</div>`;
+            : '<div class="detail-no-answer">아직 답변이 등록되지 않았습니다. 곧 답변드리겠습니다.</div>';
 
-        const adminBtn = isAdmin
-            ? `<button style="font-size:.8em; background:none; border:1px solid var(--line); border-radius:3px; padding:5px 12px; cursor:pointer; margin-top:14px; font-family:inherit;"
-                       onclick="toggleAnswerForm(${p.id})">
-                   ${p.answer ? '답변 수정' : '답변 달기'}
-               </button>
+        // 사용자 수정/삭제 버튼
+        const userActions = `
+            <div class="post-actions">
+                <button class="btn-edit" onclick="event.stopPropagation(); startEditOrDelete(${p.id},'edit')">수정</button>
+                <button class="btn-delete" onclick="event.stopPropagation(); startEditOrDelete(${p.id},'delete')">삭제</button>
+            </div>
+            <div class="pw-confirm" id="pwc-${p.id}">
+                <input type="password" placeholder="비밀번호 입력" id="pwi-${p.id}"
+                       onkeydown="if(event.key==='Enter') confirmPw(${p.id})">
+                <button onclick="confirmPw(${p.id})">확인</button>
+                <button class="pw-cancel" onclick="cancelPw(${p.id})">취소</button>
+            </div>
+            <div class="edit-form" id="ef-${p.id}">
+                <input type="text" id="et-${p.id}" value="${escHtml(p.title||'')}" placeholder="제목 (선택)">
+                <textarea id="ec-${p.id}" rows="3">${escHtml(p.content)}</textarea>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-admin-save" onclick="saveEdit(${p.id})">저장</button>
+                    <button class="btn-admin-cancel" onclick="cancelEdit(${p.id})">취소</button>
+                </div>
+            </div>`;
+
+        // 관리자 전용: 답변 달기 + 삭제
+        const adminBlock = isAdmin
+            ? `<div class="post-actions" style="margin-top:16px; padding-top:14px; border-top:1px solid var(--line);">
+                   <button class="btn-edit" onclick="event.stopPropagation(); toggleAnswerForm(${p.id})">${p.answer ? '답변 수정' : '답변 달기'}</button>
+                   <button class="btn-delete" onclick="event.stopPropagation(); adminDelete(${p.id})">질문 삭제</button>
+               </div>
                <div class="admin-answer-form" id="af-${p.id}">
                    <textarea placeholder="답변을 입력하세요...">${p.answer || ''}</textarea>
                    <div class="admin-btns">
-                       <button class="btn-admin-save"   onclick="saveAnswer(${p.id})">저장</button>
+                       <button class="btn-admin-save" onclick="saveAnswer(${p.id})">저장</button>
                        <button class="btn-admin-cancel" onclick="toggleAnswerForm(${p.id})">취소</button>
                    </div>
                </div>`
@@ -1560,16 +1666,12 @@
         <div class="detail-q-label">Q. 질문</div>
         <div class="detail-q-content">${escHtml(p.title ? p.title + '\n\n' + p.content : p.content)}</div>
         ${answerBlock}
-        ${adminBtn}`;
-    }
-
-    function escHtml(s) {
-        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        ${userActions}
+        ${adminBlock}`;
     }
 
     /* 게시물 펼치기/닫기 ── */
     function toggleDetail(id) {
-        const prev = openId;
         openId = (openId === id) ? null : id;
         render();
         if (openId) {
@@ -1578,34 +1680,11 @@
         }
     }
 
-    /* 비공개 해제 ── */
-    function unlockPost(id) {
-        const inp = document.getElementById(`unlock-${id}`);
-        const pw  = inp ? inp.value : '';
-        const posts = loadPosts();
-        const p = posts.find(x => x.id === id);
-        if (p && pw === p.password) {
-            // 일시 해제: isAdmin처럼 이 게시물만 보여주기
-            const detail = document.getElementById(`detail-${id}`);
-            if (detail) {
-                // 임시로 내용 렌더
-                const tmp = isAdmin;
-                isAdmin = true;
-                detail.innerHTML = buildDetail(p);
-                isAdmin = tmp;
-            }
-        } else {
-            alert('비밀번호가 일치하지 않습니다.');
-        }
-    }
-
     /* 글쓰기 폼 ── */
     function toggleForm() {
         const f = document.getElementById('boardForm');
         f.classList.toggle('open');
-        if (f.classList.contains('open')) {
-            document.getElementById('fName').focus();
-        }
+        if (f.classList.contains('open')) document.getElementById('fName').focus();
     }
 
     function submitPost() {
@@ -1613,29 +1692,102 @@
         const pw      = document.getElementById('fPw').value;
         const title   = document.getElementById('fTitle').value.trim();
         const content = document.getElementById('fContent').value.trim();
-        const priv    = document.getElementById('fPrivate').checked;
 
         if (!name)    { alert('이름을 입력해주세요.'); document.getElementById('fName').focus(); return; }
+        if (!pw)      { alert('비밀번호를 입력해주세요.'); document.getElementById('fPw').focus(); return; }
         if (!content) { alert('질문 내용을 입력해주세요.'); document.getElementById('fContent').focus(); return; }
-        if (priv && !pw) { alert('비공개 질문은 비밀번호를 입력해주세요.'); document.getElementById('fPw').focus(); return; }
 
         const posts = loadPosts();
-        posts.push({ id: Date.now(), name, title, content, isPrivate: priv, password: pw, answer: null, answeredAt: null });
+        posts.push({ id: Date.now(), name, title, content, password: pw, answer: null, answeredAt: null });
         savePosts(posts);
 
-        // 폼 초기화
         document.getElementById('fName').value    = '';
         document.getElementById('fPw').value      = '';
         document.getElementById('fTitle').value   = '';
         document.getElementById('fContent').value = '';
-        document.getElementById('fPrivate').checked = false;
         document.getElementById('boardForm').classList.remove('open');
 
         render();
-        alert('질문이 등록되었습니다. 이강락 대표님이 곧 답변드리겠습니다. 🙏');
+        alert('질문이 등록되었습니다. 이강락 대표님이 곧 답변드리겠습니다.');
     }
 
-    /* 답변 폼 ── */
+    /* 수정/삭제 — 비밀번호 확인 ── */
+    let pendingAction = null; // { id, type: 'edit'|'delete' }
+
+    function startEditOrDelete(id, type) {
+        // 관리자는 비밀번호 없이 바로 실행
+        if (isAdmin) {
+            if (type === 'delete') { adminDelete(id); }
+            else { showEditForm(id); }
+            return;
+        }
+        pendingAction = { id, type };
+        // 다른 pw-confirm 닫기
+        document.querySelectorAll('.pw-confirm.open').forEach(el => el.classList.remove('open'));
+        const pwc = document.getElementById(`pwc-${id}`);
+        pwc.classList.add('open');
+        document.getElementById(`pwi-${id}`).value = '';
+        document.getElementById(`pwi-${id}`).focus();
+    }
+
+    function confirmPw(id) {
+        const pw = document.getElementById(`pwi-${id}`).value;
+        const posts = loadPosts();
+        const p = posts.find(x => x.id === id);
+        if (!p || pw !== p.password) {
+            alert('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+        document.getElementById(`pwc-${id}`).classList.remove('open');
+        if (pendingAction && pendingAction.type === 'delete') {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                const idx = posts.indexOf(p);
+                posts.splice(idx, 1);
+                savePosts(posts);
+                openId = null;
+                render();
+            }
+        } else {
+            showEditForm(id);
+        }
+        pendingAction = null;
+    }
+
+    function cancelPw(id) {
+        document.getElementById(`pwc-${id}`).classList.remove('open');
+        pendingAction = null;
+    }
+
+    /* 수정 폼 ── */
+    function showEditForm(id) {
+        document.getElementById(`ef-${id}`).classList.add('open');
+    }
+    function cancelEdit(id) {
+        document.getElementById(`ef-${id}`).classList.remove('open');
+    }
+    function saveEdit(id) {
+        const newTitle   = document.getElementById(`et-${id}`).value.trim();
+        const newContent = document.getElementById(`ec-${id}`).value.trim();
+        if (!newContent) { alert('내용을 입력해주세요.'); return; }
+        const posts = loadPosts();
+        const p = posts.find(x => x.id === id);
+        if (p) { p.title = newTitle; p.content = newContent; }
+        savePosts(posts);
+        render();
+    }
+
+    /* 관리자 삭제 (비밀번호 불필요) ── */
+    function adminDelete(id) {
+        if (!confirm('이 질문을 삭제하시겠습니까?')) return;
+        const posts = loadPosts();
+        const idx = posts.findIndex(x => x.id === id);
+        if (idx > -1) posts.splice(idx, 1);
+        savePosts(posts);
+        openId = null;
+        render();
+    }
+
+    /* 답변 폼 (관리자) ── */
     function toggleAnswerForm(id) {
         document.getElementById(`af-${id}`).classList.toggle('open');
     }
@@ -1664,8 +1816,7 @@
         const pw = document.getElementById('adminPwInput').value;
         if (pw === ADMIN_PW) {
             isAdmin = true;
-            document.getElementById('adminBar').style.display = 'flex';
-            document.getElementById('adminLoginBtn').textContent = '관리자 로그아웃';
+            document.getElementById('adminFloat').classList.add('on');
             closeAdminModal();
             render();
         } else {
@@ -1674,9 +1825,9 @@
         }
     }
     function adminLogout() {
+        if (!confirm('관리자 모드를 종료하시겠습니까?')) return;
         isAdmin = false;
-        document.getElementById('adminBar').style.display = 'none';
-        document.getElementById('adminLoginBtn').textContent = '관리자';
+        document.getElementById('adminFloat').classList.remove('on');
         render();
     }
 
