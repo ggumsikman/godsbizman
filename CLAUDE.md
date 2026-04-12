@@ -3,7 +3,7 @@
 ## 프로젝트 개요
 - **플랫폼명**: 사업하는 예수쟁이
 - **GitHub 레포**: https://github.com/ggumsikman/godsbizman
-- **라이브 URL**: https://ggumsikman.github.io/godsbizman
+- **라이브 URL**: https://ggumsikman.vercel.app/
 - **로컬 경로**: `C:\Users\leese\godsbizman\`
 - **제작자**: 꿈식판 꿈식맨 (이석훈)
 
